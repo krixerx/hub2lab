@@ -3,6 +3,10 @@
 Every command needed to set the lab up and to drive the demonstration, in order.
 Run them in Git Bash from the `lab` directory unless a step says otherwise.
 
+This is the operator's copy. `docs/airlock-proof-run.md` is the same five stages
+written for the people watching, with what each one establishes and what it does
+not.
+
 The lab plays three parts on one PC. Keep them straight while presenting, because
 the separation is the thing being demonstrated:
 

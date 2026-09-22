@@ -35,6 +35,7 @@ byte for byte, and no diff review is needed to establish it.
 | `docs/designs/github-to-gitlab-airlock.md` | The design: problem, approaches considered, the chosen one, open questions. |
 | `docs/draftSpec.md` | The task as specified, with acceptance criteria in Gherkin. |
 | `docs/airlock-presentation.md` | The slide content for the security review. |
+| `docs/airlock-proof-run.md` | The demonstration script: the five stages and what each one establishes. |
 | `lab/RUNBOOK.md` | **Start here to run anything.** Every command, in order, with the expected output. |
 | `lab/docker-compose.yml` | Local GitLab CE and the security station. |
 | `lab/station/` | The station image: gitleaks, Opengrep and Trivy, all pinned, rules and databases baked in. |
