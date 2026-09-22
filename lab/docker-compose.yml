@@ -1,0 +1,78 @@
+# Airlock lab: local GitLab (the "inside") plus the security station container (the gate).
+#
+# Nothing here is production-shaped. It is a demonstration rig on one Windows PC:
+# GitLab is bound to 127.0.0.1 only, and the station holds no GitLab write credentials.
+name: airlock-lab
+
+services:
+  # ---------------------------------------------------------------------------
+  # The customer's internal GitLab. Pinned version; named volumes only, because
+  # bind-mounting a Windows host path into /var/opt/gitlab fails on ownership.
+  # ---------------------------------------------------------------------------
+  gitlab:
+    image: gitlab/gitlab-ce:19.3.2-ce.0
+    container_name: airlock-gitlab
+    hostname: gitlab
+    restart: unless-stopped
+    shm_size: "256m"
+    environment:
+      # First boot only. Ignored once /etc/gitlab is initialised.
+      GITLAB_ROOT_PASSWORD: ${GITLAB_ROOT_PASSWORD:?set GITLAB_ROOT_PASSWORD in lab/.env}
+      GITLAB_OMNIBUS_CONFIG: |
+        # external_url must match the published port or GitLab advertises clone
+        # URLs that do not resolve from the host.
+        external_url 'http://127.0.0.1:8929'
+        gitlab_rails['gitlab_shell_ssh_port'] = 2224
+
+        # Lab trim. Cuts roughly 1.5 GB of RSS and several minutes off first boot.
+        prometheus_monitoring['enable'] = false
+        registry['enable'] = false
+        gitlab_kas['enable'] = false
+        puma['worker_processes'] = 2
+        sidekiq['max_concurrency'] = 5
+
+        # The airlock never executes incoming code inside. No CI, no runners.
+        gitlab_rails['gitlab_default_projects_features_builds'] = false
+        gitlab_rails['gitlab_default_projects_features_container_registry'] = false
+    ports:
+      - "127.0.0.1:8929:8929"
+      - "127.0.0.1:2224:22"
+    volumes:
+      - gitlab-config:/etc/gitlab
+      - gitlab-logs:/var/log/gitlab
+      - gitlab-data:/var/opt/gitlab
+
+  # ---------------------------------------------------------------------------
+  # Station 2, the quarantine. A Linux container so the three scanners are the
+  # same pinned binaries everywhere and Windows path/line-ending behaviour never
+  # enters the scan path.
+  #
+  # It reaches GitLab over the LAN to refresh its read-only mirror, using a
+  # deploy token scoped to read_repository. It cannot push. That is the point.
+  # ---------------------------------------------------------------------------
+  station:
+    build:
+      context: ./station
+    image: airlock-station:1.0.0
+    container_name: airlock-station
+    init: true
+    command: ["sleep", "infinity"]
+    depends_on:
+      - gitlab
+    environment:
+      # http://gitlab:8929/<group>/<project>.git with the read-only deploy token.
+      QUARANTINE_REMOTE: ${QUARANTINE_REMOTE:-}
+      AIRLOCK_SCRIPT_VERSION: "1.0.0"
+    volumes:
+      # The transfer medium. In production this is whatever the customer accepts;
+      # here it is a directory both sides can see.
+      - ./transfer:/transfer
+      # The mirror of GitLab. Survives between runs; rebuildable at any time.
+      - ./quarantine:/quarantine
+      - ./scripts:/opt/airlock/scripts:ro
+    working_dir: /transfer
+
+volumes:
+  gitlab-config:
+  gitlab-logs:
+  gitlab-data:

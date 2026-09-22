@@ -1,0 +1,7 @@
+transfer/
+quarantine/
+importer/
+.env
+.secrets
+exporter/
+demo/

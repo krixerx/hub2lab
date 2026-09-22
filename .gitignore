@@ -1,0 +1,7 @@
+# Eclipse workspace metadata, specific to one PC.
+.settings/
+
+# A working clone of the migration project, used to try things against a real
+# repository. It has its own history and its own remote; it is not part of this
+# one.
+work/

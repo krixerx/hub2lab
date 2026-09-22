@@ -1,0 +1,18 @@
+# The station's own gitleaks configuration. Passed with --config explicitly, and
+# the scanners run under `env -i`, so neither a repo-resident .gitleaks.toml nor
+# an inherited GITLEAKS_CONFIG / GITLEAKS_CONFIG_TOML can take precedence.
+title = "Airlock security station"
+
+[extend]
+useDefault = true
+
+# False positives are triaged HERE, under the reviewer's control, never in the
+# incoming repository, and never as .gitleaksignore fingerprints: a fingerprint is
+# keyed on commit SHA + file + line, and the remediation path rewrites exactly
+# those commits, so fingerprint entries evaporate and the reviewer re-triages the
+# same findings on every retry. Use rule id, path or regex instead.
+#
+# [[allowlists]]
+#   description = "Example: test fixture keys that are not real"
+#   targetRules = ["generic-api-key"]
+#   paths = ['''^test/fixtures/.*''']

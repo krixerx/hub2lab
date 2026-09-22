@@ -1,0 +1,4 @@
+# The station scripts run inside a Linux container, where a CRLF line ending is a
+# syntax error with a confusing message. Git for Windows converts on checkout by
+# default, so say it explicitly here rather than relying on anyone's core.autocrlf.
+* text=auto eol=lf
