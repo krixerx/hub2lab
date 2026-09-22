@@ -46,6 +46,10 @@ byte for byte, and no diff review is needed to establish it.
 Docker Desktop, Git for Windows, and about 20 minutes for the first boot. Then
 follow `lab/RUNBOOK.md` from part A.
 
+Everything runs in Git Bash, not PowerShell or `cmd`. Double-clicking
+`lab\airlock-shell.cmd` opens one in the right directory with the lab credentials
+loaded.
+
 Nothing in this repository is production shaped. It is a demonstration rig: GitLab
 is bound to 127.0.0.1, the credentials are lab credentials, and the security
 station holds no write access to anything.

@@ -73,8 +73,10 @@ project freshly bootstrapped and empty, and GitHub sitting at the baseline commi
 `scripts/airlock-reset.sh --yes` puts it there in about a minute, and
 `scripts/demo-seed.sh baseline` fills the GitHub side.
 
-Two shells make the demo readable, one for the developer zone and one for the
-inside. Both load the credentials the same way:
+Every command below is bash, run in Git Bash. PowerShell and `cmd` cannot run any
+of it. Two Git Bash windows make the demo readable, one for the developer zone and
+one for the inside; `lab\airlock-shell.cmd` opens one with the credentials already
+loaded, or do it by hand:
 
 ```bash
 cd ~/eclipse-workspace/Hub2Lab/lab

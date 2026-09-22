@@ -7,6 +7,38 @@ This is the operator's copy. `docs/airlock-proof-run.md` is the same five stages
 written for the people watching, with what each one establishes and what it does
 not.
 
+## Which shell
+
+Git Bash, not PowerShell and not `cmd`. Everything here is a bash script, and
+Windows' own shells cannot run any of it: PowerShell reports that
+`scripts/airlock-export.sh` is not recognised, and `source` is not a PowerShell
+command at all.
+
+The short way in: double-click `lab\airlock-shell.cmd` in Explorer. It opens Git
+Bash in the lab directory with `.secrets` and `demo.env` already loaded, which is
+the state every command below assumes.
+
+By hand: right-click the `lab` folder in Explorer and choose **Open Git Bash
+here**, on Windows 11 behind **Show more options**. Then:
+
+```bash
+source .secrets
+source demo.env
+```
+
+If Git Bash is not in the menu, install Git for Windows from
+<https://git-scm.com/download/win> and take the default options.
+
+Docker Desktop has to be running either way. Start it from the Start menu and wait
+for the whale in the tray to stop animating; `docker compose ps` answering instead
+of erroring is the real test.
+
+Two habits once you are in Git Bash. Paths use forward slashes, so
+`~/eclipse-workspace/Hub2Lab/lab`. And the Windows drive is `/c/...`, so
+`C:\Users\kriks` is `/c/Users/kriks`.
+
+## The three parts
+
 The lab plays three parts on one PC. Keep them straight while presenting, because
 the separation is the thing being demonstrated:
 
@@ -16,8 +48,8 @@ the separation is the thing being demonstrated:
 | Security station, the gate | The `airlock-station` container | A read-only mirror of GitLab. No write credentials anywhere. |
 | GitLab, inside | The `airlock-gitlab` container | The protected `main`. Reachable on 127.0.0.1 only. |
 
-Two shells make the demo easier to follow: one for the developer zone and one for
-the inside. Both need the credentials loaded:
+Two Git Bash windows make the demo easier to follow, one for the developer zone
+and one for the inside. Open `airlock-shell.cmd` twice, or in each window:
 
 ```bash
 cd ~/eclipse-workspace/Hub2Lab/lab
